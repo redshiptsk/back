@@ -1,0 +1,216 @@
+[
+  {
+    "id": 1,
+    "name": "Футболка с логотипом",
+    "description": "Стильная футболка из 100% хлопка с логотипом нашего бренда.",
+    "price": 15.99,
+    "discount": 10,
+    "image": "tshirt.jpg",
+    "count": 100,
+    "rating": 4.5,
+    "reviews": 25
+  },
+  {
+    "id": 2,
+    "name": "Джинсы классического кроя",
+    "description": "Универсальные джинсы из прочного денима, идеально сидят на фигуре.",
+    "price": 49.99,
+    "image": "jeans.jpg",
+    "count": 50,
+    "rating": 4.2,
+    "reviews": 15
+  },
+  {
+    "id": 3,
+    "name": "Кеды спортивные",
+    "description": "Удобные и стильные спортивные кеды, идеальны для повседневной носки.",
+    "price": 39.99,
+    "discount": 5,
+    "image": "sneakers.jpg",
+    "count": 75,
+    "rating": 4.8,
+    "reviews": 30
+  },
+  {
+    "id": 4,
+    "name": "Платье летнее",
+    "description": "Лёгкое и воздушное платье, идеально подходит для жаркой погоды.",
+    "price": 29.99,
+    "image": "dress.jpg",
+    "count": 30,
+    "rating": 4.0,
+    "reviews": 10
+  },
+  {
+    "id": 5,
+    "name": "Рюкзак городской",
+    "description": "Прочный и вместительный городской рюкзак, удобный для повседневного использования.",
+    "price": 24.99,
+    "image": "backpack.jpg",
+    "count": 80,
+    "rating": 4.7,
+    "reviews": 20
+  },
+  {
+    "id": 6,
+    "name": "Часы наручные",
+    "description": "Стильные наручные часы с кварцевым механизмом.",
+    "price": 79.99,
+    "image": "watch.jpg",
+    "count": 20,
+    "rating": 4.9,
+    "reviews": 12
+  },
+  {
+    "id": 7,
+    "name": "Зимняя куртка",
+    "description": "Теплая зимняя куртка с капюшоном.",
+    "price": 99.99,
+    "image": "winter_jacket.jpg",
+    "count": 25,
+    "rating": 4.6,
+    "reviews": 18
+  },
+  {
+    "id": 8,
+    "name": "Шарф шерстяной",
+    "description": "Мягкий шерстяной шарф.",
+    "price": 19.99,
+    "discount": 15,
+    "image": "wool_scarf.jpg",
+    "count": 100,
+    "rating": 4.3,
+    "reviews": 35
+  },
+  {
+    "id": 9,
+    "name": "Перчатки кожаные",
+    "description": "Стильные кожаные перчатки.",
+    "price": 34.99,
+    "image": "leather_gloves.jpg",
+    "count": 40,
+    "rating": 4.7,
+    "reviews": 22
+  },
+  {
+    "id": 10,
+    "name": "Сапоги зимние",
+    "description": "Теплые зимние сапоги.",
+    "price": 74.99,
+    "image": "winter_boots.jpg",
+    "count": 30,
+    "rating": 4.4,
+    "reviews": 16
+  },
+  {
+    "id": 11,
+    "name": "Шапка вязаная",
+    "description": "Уютная вязаная шапка.",
+    "price": 14.99,
+    "image": "knitted_hat.jpg",
+    "count": 90,
+    "rating": 4.2,
+    "reviews": 28
+  },
+  {
+    "id": 12,
+    "name": "Сумка кожаная",
+    "description": "Элегантная кожаная сумка.",
+    "price": 69.99,
+    "image": "leather_bag.jpg",
+    "count": 15,
+    "rating": 4.8,
+    "reviews": 10
+  },
+  {
+    "id": 13,
+    "name": "Солнечные очки",
+    "description": "Стильные солнечные очки.",
+    "price": 29.99,
+    "image": "sunglasses.jpg",
+    "count": 60,
+    "rating": 4.5,
+    "reviews": 32
+  },
+  {
+    "id": 14,
+    "name": "Спортивный костюм",
+    "description": "Удобный спортивный костюм.",
+    "price": 44.99,
+    "discount": 20,
+    "image": "sportsuit.jpg",
+    "count": 55,
+    "rating": 4.6,
+    "reviews": 25
+  },
+  {
+    "id": 15,
+    "name": "Кроссовки для бега",
+    "description": "Легкие кроссовки для бега.",
+    "price": 59.99,
+    "image": "running_shoes.jpg",
+    "count": 45,
+    "rating": 4.9,
+    "reviews": 18
+  },
+  {
+    "id": 16,
+    "name": "Юбка плиссированная",
+    "description": "Стильная юбка плиссированная.",
+    "price": 24.99,
+    "image": "pleated_skirt.jpg",
+    "count": 70,
+    "rating": 4.3,
+    "reviews": 20
+  },
+  {
+    "id": 17,
+    "name": "Блузка шелковая",
+    "description": "Нежная шелковая блузка.",
+    "price": 39.99,
+    "image": "silk_blouse.jpg",
+    "count": 35,
+    "rating": 4.7,
+    "reviews": 15
+  },
+  {
+    "id": 18,
+    "name": "Штаны спортивные",
+    "description": "Удобные спортивные штаны.",
+    "price": 29.99,
+    "image": "sports_pants.jpg",
+    "count": 85,
+    "rating": 4.4,
+    "reviews": 30
+  },
+  {
+    "id": 19,
+    "name": "Пиджак мужской",
+    "description": "Элегантный мужской пиджак.",
+    "price": 119.99,
+    "image": "mens_jacket.jpg",
+    "count": 10,
+    "rating": 4.8,
+    "reviews": 8
+  },
+  {
+    "id": 20,
+    "name": "Брюки классические",
+    "description": "Классические брюки мужского кроя.",
+    "price": 54.99,
+    "image": "classic_trousers.jpg",
+    "count": 40,
+    "rating": 4.5,
+    "reviews": 22
+  },
+  {
+    "id": 21,
+    "name": "Рубашка поло",
+    "description": "Классическая рубашка поло.",
+    "price": 19.99,
+    "image": "polo_shirt.jpg",
+    "count": 120,
+    "rating": 4.2,
+    "reviews": 40
+  }
+]
