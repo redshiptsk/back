@@ -5,10 +5,9 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const port = process.env.PORT || 3000
 
   app.enableCors({
-    origin: `http://${process.env.DB_HOST}:${process.env.DB_PORT}`,
+    origin: 'http://localhost:5174',
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
     credentials: true,
   });
@@ -29,7 +28,6 @@ async function bootstrap() {
       },
     }),
   );
-
-  await app.listen(port);
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
