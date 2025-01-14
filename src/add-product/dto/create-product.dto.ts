@@ -1,28 +1,28 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 import {
-  IsString,
-  IsNumber,
   IsArray,
-  IsOptional,
-  ValidateNested,
   IsNotEmpty,
-} from 'class-validator';
-import { Type } from 'class-transformer';
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from "class-validator";
+import { Transform, Type } from "class-transformer";
 
 class CharacteristicDto {
-  @ApiProperty({ example: 'Color' })
+  @ApiProperty({ example: "Color" })
   @IsString()
   @IsNotEmpty()
   key: string;
 
-  @ApiProperty({ example: ['Red', 'Blue'] })
+  @ApiProperty({ example: ["Red", "Blue"] })
   @IsArray()
   @IsString({ each: true })
   values: string[];
 }
 
 export class CreateProductDto {
-  @ApiProperty({ example: 'Havic HV G-92 Gamepad' })
+  @ApiProperty({ example: "Havic HV G-92 Gamepad" })
   @IsString()
   @IsNotEmpty()
   name: string;
@@ -31,23 +31,23 @@ export class CreateProductDto {
   @IsNumber()
   price: number;
 
-  @ApiProperty({ example: 'Product description' })
+  @ApiProperty({ example: "Product description" })
   @IsString()
   @IsNotEmpty()
   description: string;
 
-  @ApiProperty({ example: null })
+  @ApiProperty({ type: "string", format: "binary" })
   @IsOptional()
   @IsString()
-  photo: string | null;
+  photo: string;
 
   @ApiProperty({ example: [1, 2] })
-  @IsArray()
+  @Transform(({ value }) => JSON.parse(value))
   @IsNumber({}, { each: true })
   categoryIds: number[];
 
-  @ApiProperty({ example: [{ key: 'Color', values: ['Red', 'Blue'] }] })
-  @IsArray()
+  @ApiProperty({ example: [{ key: "Color", values: ["Red", "Blue"] }] })
+  @Transform(({ value }) => JSON.parse(value))
   @ValidateNested({ each: true })
   @Type(() => CharacteristicDto)
   characteristics: CharacteristicDto[];
