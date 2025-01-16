@@ -1,10 +1,13 @@
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/sequelize';
 import {Product} from './products.model';
-import {CreateProductDto,} from './dto';
+import {CreateProductDto, PaginatedProductsDto, PaginationQueryDto,} from './dto';
 import {ProductCategoryService} from '../product-category/product-category.service';
 import {ProductCharacteristicService} from "../product-characteristic/product-characteristic.service";
 import {Sequelize} from "sequelize-typescript";
+import {Op} from "sequelize";
+import {Category} from "../categories/categories.model";
+import {CharacteristicValue} from "../characteristics/entities";
 
 @Injectable()
 export class ProductsService {
@@ -57,5 +60,43 @@ export class ProductsService {
 
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    async findAndPaginateAll(
+        paginationQuery: PaginationQueryDto,
+    ): Promise<PaginatedProductsDto> {
+        console.info(JSON.stringify(paginationQuery))
+
+        const {categoryId, characteristicValuesIds = []} = paginationQuery.filters ?? {};
+        const {pageSize = 10, page = 1, search = ''} = paginationQuery;
+
+        const where = {};
+        if (search) {
+            where['name'] = {
+                [Op.like]: `%${search}%`,
+            };
+        }
+
+        const offset = pageSize * (page - 1);
+
+        const {rows: data, count} = await this.productModel.findAndCountAll({
+            where,
+            limit: pageSize,
+            offset,
+            include: [
+                {
+                    model: Category,
+                    attributes: [],
+                    where: categoryId ? {id: categoryId} : undefined,
+                },
+                {
+                    model: CharacteristicValue,
+                    attributes: [],
+                    where: characteristicValuesIds.length ? {id: {[Op.in]: characteristicValuesIds}} : undefined,
+                }
+            ]
+        });
+
+        return {data, totalPages: Math.ceil(count / pageSize)};
     }
 }

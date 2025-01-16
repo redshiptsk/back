@@ -1,8 +1,10 @@
 import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/sequelize';
 import {Characteristic, CharacteristicValue} from './entities';
-import {CharacteristicDto, CreateCharacteristicDto} from './dto';
+import {CharacteristicDto, CharacteristicsQueryDto, CreateCharacteristicDto} from './dto';
 import {Transaction} from "sequelize";
+import {Product} from "../products/products.model";
+import {Category} from "../categories/categories.model";
 
 @Injectable()
 export class CharacteristicsService {
@@ -12,6 +14,30 @@ export class CharacteristicsService {
         @InjectModel(CharacteristicValue)
         private characteristicValueModel: typeof CharacteristicValue,
     ) {
+    }
+
+    async findAll({categoryId}: CharacteristicsQueryDto): Promise<CharacteristicDto[]> {
+        return this.characteristicModel.findAll({
+            include: [
+                {
+                    model: CharacteristicValue,
+                    attributes: ['id', 'value'],
+                    include: [
+                        {
+                            model: Product,
+                            attributes: [],
+                            include: [
+                                {
+                                    model: Category,
+                                    attributes: [],
+                                    where: {id: categoryId}
+                                },
+                            ],
+                        },
+                    ],
+                }
+            ],
+        });
     }
 
     async create({key, values}: CreateCharacteristicDto, transaction?: Transaction): Promise<CharacteristicDto> {
