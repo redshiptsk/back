@@ -1,36 +1,46 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Product } from './products.model';
-import { PaginatedProductsDto, PaginationQueryDto } from './dto';
-import { Op } from 'sequelize';
+import {Injectable} from '@nestjs/common';
+import {InjectModel} from '@nestjs/sequelize';
+import {Product} from './products.model';
+import {CreateProductDto,} from './dto';
+import {ProductCategoryService} from '../product-category/product-category.service';
+import {ProductCharacteristicService} from "../product-characteristic/product-characteristic.service";
 
 @Injectable()
 export class ProductsService {
-  constructor(
-    @InjectModel(Product)
-    private productModel: typeof Product,
-  ) {}
-
-  async findAndPaginateAll(
-    paginationQuery: PaginationQueryDto,
-  ): Promise<PaginatedProductsDto> {
-    const { pageSize = 10, page = 1, search = '' } = paginationQuery;
-
-    const where = {};
-    if (search) {
-      where['name'] = {
-        [Op.like]: `%${search}%`,
-      };
+    constructor(
+        @InjectModel(Product)
+        private productModel: typeof Product,
+        private readonly productCategoryService: ProductCategoryService,
+        private readonly productCharacteristicService: ProductCharacteristicService,
+    ) {
     }
 
-    const offset = pageSize * (page - 1);
+    async create(createProductDto: CreateProductDto, file: Express.Multer.File) {
+        const imagePath = file ? `/uploads/${file.filename}` : null;
 
-    const { rows: data, count } = await this.productModel.findAndCountAll({
-      where,
-      limit: pageSize,
-      offset,
-    });
+        const product = await this.productModel.create({
+            ...createProductDto,
+            image: imagePath,
+        });
 
-    return { data, totalPages: Math.ceil(count / pageSize) };
-  }
+        if (createProductDto.categoryIds) {
+            for (const categoryId of createProductDto.categoryIds) {
+                await this.productCategoryService.create({
+                    productId: product.id,
+                    categoryId,
+                });
+            }
+        }
+
+        if (createProductDto.characteristics) {
+            for (const characteristic of createProductDto.characteristics) {
+                await this.productCharacteristicService.create({
+                    productId: product.id,
+                    characteristic,
+                });
+            }
+        }
+
+        return product;
+    }
 }
