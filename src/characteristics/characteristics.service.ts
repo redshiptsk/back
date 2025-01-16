@@ -2,6 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/sequelize';
 import {Characteristic, CharacteristicValue} from './entities';
 import {CharacteristicDto, CreateCharacteristicDto} from './dto';
+import {Transaction} from "sequelize";
 
 @Injectable()
 export class CharacteristicsService {
@@ -13,15 +14,16 @@ export class CharacteristicsService {
     ) {
     }
 
-    async create({key, values}: CreateCharacteristicDto): Promise<CharacteristicDto> {
+    async create({key, values}: CreateCharacteristicDto, transaction?: Transaction): Promise<CharacteristicDto> {
         let characteristic = await this.characteristicModel.findOne({
             where: {key},
         });
 
         if (!characteristic) {
-            characteristic = await this.characteristicModel.create({
-                key: key,
-            });
+            characteristic = await this.characteristicModel.create(
+                {key},
+                {transaction}
+            );
         }
 
         for (const value of values) {
@@ -36,7 +38,7 @@ export class CharacteristicsService {
                 await this.characteristicValueModel.create({
                     value,
                     characteristicId: characteristic.id,
-                });
+                }, {transaction});
             }
 
         }

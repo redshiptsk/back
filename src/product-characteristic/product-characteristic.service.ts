@@ -4,6 +4,7 @@ import {CreateProductCharacteristicDto} from './dto';
 import {ProductCharacteristicValue} from './product-characteristic-value.model';
 import {CharacteristicsService} from '../characteristics/characteristics.service';
 import {CharacteristicDto} from "../characteristics/dto";
+import {Transaction} from "sequelize";
 
 @Injectable()
 export class ProductCharacteristicService {
@@ -18,7 +19,8 @@ export class ProductCharacteristicService {
         {
             productId,
             characteristic: characteristicDto,
-        }: CreateProductCharacteristicDto
+        }: CreateProductCharacteristicDto,
+        transaction?: Transaction
     ): Promise<CharacteristicDto> {
         const productCharacteristic = await this.characteristicsService.create(characteristicDto);
 
@@ -27,7 +29,7 @@ export class ProductCharacteristicService {
                 productId,
                 characteristicId: productCharacteristic.id,
                 characteristicValueId: productCharacteristicValue.id,
-            });
+            }, {transaction});
         }
 
         return productCharacteristic;
