@@ -18,6 +18,7 @@ export class CharacteristicsService {
 
     async findAll({categoryId}: CharacteristicsQueryDto): Promise<CharacteristicDto[]> {
         return this.characteristicModel.findAll({
+            where: {'$values.products.categories.id$': categoryId},
             include: [
                 {
                     model: CharacteristicValue,
@@ -30,7 +31,6 @@ export class CharacteristicsService {
                                 {
                                     model: Category,
                                     attributes: [],
-                                    where: {id: categoryId}
                                 },
                             ],
                         },
