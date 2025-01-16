@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/sequelize';
 import {Product} from './products.model';
 import {CreateProductDto,} from './dto';
@@ -51,7 +51,11 @@ export class ProductsService {
 
             return result;
         } catch (error) {
-            throw new Error(error);
+            if (error instanceof HttpException) {
+                throw error;
+            }
+
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

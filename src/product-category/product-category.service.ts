@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/sequelize';
 import {ProductCategory} from './product-category.model';
 import {CreateProductCategoryDto} from './dto';
@@ -19,7 +19,7 @@ export class ProductCategoryService {
         const category = await this.categoriesService.findByPk(categoryId);
 
         if (!category) {
-            throw new Error(`Category with ID ${categoryId} not found`);
+            throw new HttpException(`Category with ID ${categoryId} not found`, HttpStatus.BAD_REQUEST);
         }
 
         return await this.productCategoryModel.create({
