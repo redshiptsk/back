@@ -15,7 +15,7 @@ import {ProductCategory} from './add-product/add-product-category.model';
 import {Category} from './add-product/category.model';
 import {Characteristic} from './add-product/characteristic.model';
 import {CharacteristicValue} from './add-product/characteristic-value.model';
-import {ChatGateway} from './chat/chat.gateway';
+import {ChatModule} from './chat/chat.module';
 
 @Module({
     imports: [
@@ -48,7 +48,8 @@ import {ChatGateway} from './chat/chat.gateway';
             rootPath: join(__dirname, '..', 'uploads'),
             serveRoot: '/uploads',
         }),
+        ChatModule,
     ],
-    providers: [ChatGateway],
 })
-export class AppModule {}
+export class AppModule {
+}
