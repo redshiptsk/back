@@ -20,6 +20,8 @@ import {
 import {ProductCategoryModule} from './product-category/products-category.module';
 import {ProductCharacteristicValue} from "./product-characteristic/product-characteristic-value.model";
 import {ProductCharacteristicModule} from "./product-characteristic/product-characteristic.module";
+import {ChatModule} from './chat/chat.module';
+
 
 @Module({
     imports: [
@@ -39,6 +41,7 @@ import {ProductCharacteristicModule} from "./product-characteristic/product-char
                 Characteristic,
                 CharacteristicValue,
                 ProductCharacteristicValue,
+
             ],
             autoLoadModels: true,
             synchronize: true,
@@ -51,10 +54,12 @@ import {ProductCharacteristicModule} from "./product-characteristic/product-char
         CharacteristicsModule,
         ProductCategoryModule,
         ProductCharacteristicModule,
+
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'uploads'),
             serveRoot: '/uploads',
         }),
+        ChatModule,
     ],
 })
 export class AppModule {
