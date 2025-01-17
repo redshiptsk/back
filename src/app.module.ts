@@ -9,13 +9,19 @@ import {Product} from './products/products.model';
 import {ConfigModule} from '@nestjs/config';
 import {AuthModule} from './auth/entities/auth.module';
 import {CartModule} from './cart/entities/cart.module';
-import {AddProductModule} from './add-product/add-product.module';
-import {AddProduct} from './add-product/add-product.model';
-import {ProductCategory} from './add-product/add-product-category.model';
-import {Category} from './add-product/category.model';
-import {Characteristic} from './add-product/characteristic.model';
-import {CharacteristicValue} from './add-product/characteristic-value.model';
+import {Category} from './categories/categories.model';
+import {CategoriesModule} from './categories/categories.module';
+import {CharacteristicsModule} from './characteristics/characteristics.module';
+import {ProductCategory} from './product-category/product-category.model';
+import {
+    Characteristic,
+    CharacteristicValue,
+} from './characteristics/entities';
+import {ProductCategoryModule} from './product-category/products-category.module';
+import {ProductCharacteristicValue} from "./product-characteristic/product-characteristic-value.model";
+import {ProductCharacteristicModule} from "./product-characteristic/product-characteristic.module";
 import {ChatModule} from './chat/chat.module';
+
 
 @Module({
     imports: [
@@ -30,11 +36,12 @@ import {ChatModule} from './chat/chat.module';
             models: [
                 User,
                 Product,
-                AddProduct,
-                ProductCategory,
                 Category,
+                ProductCategory,
                 Characteristic,
                 CharacteristicValue,
+                ProductCharacteristicValue,
+
             ],
             autoLoadModels: true,
             synchronize: true,
@@ -43,7 +50,11 @@ import {ChatModule} from './chat/chat.module';
         AuthModule,
         ProductsModule,
         CartModule,
-        AddProductModule,
+        CategoriesModule,
+        CharacteristicsModule,
+        ProductCategoryModule,
+        ProductCharacteristicModule,
+
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'uploads'),
             serveRoot: '/uploads',

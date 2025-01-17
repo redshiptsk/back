@@ -1,36 +1,61 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
-import { Product } from './products.model';
-import { PaginatedProductsDto, PaginationQueryDto } from './dto';
-import { Op } from 'sequelize';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import {InjectModel} from '@nestjs/sequelize';
+import {Product} from './products.model';
+import {CreateProductDto,} from './dto';
+import {ProductCategoryService} from '../product-category/product-category.service';
+import {ProductCharacteristicService} from "../product-characteristic/product-characteristic.service";
+import {Sequelize} from "sequelize-typescript";
 
 @Injectable()
 export class ProductsService {
-  constructor(
-    @InjectModel(Product)
-    private productModel: typeof Product,
-  ) {}
-
-  async findAndPaginateAll(
-    paginationQuery: PaginationQueryDto,
-  ): Promise<PaginatedProductsDto> {
-    const { pageSize = 10, page = 1, search = '' } = paginationQuery;
-
-    const where = {};
-    if (search) {
-      where['name'] = {
-        [Op.like]: `%${search}%`,
-      };
+    constructor(
+        @InjectModel(Product)
+        private productModel: typeof Product,
+        private readonly productCategoryService: ProductCategoryService,
+        private readonly productCharacteristicService: ProductCharacteristicService,
+        private readonly sequelize: Sequelize,
+    ) {
     }
 
-    const offset = pageSize * (page - 1);
+    async create(createProductDto: CreateProductDto, file: Express.Multer.File) {
+        const imagePath = file ? `/uploads/${file.filename}` : null;
 
-    const { rows: data, count } = await this.productModel.findAndCountAll({
-      where,
-      limit: pageSize,
-      offset,
-    });
+        try {
+            const result = await this.sequelize.transaction(async transaction => {
 
-    return { data, totalPages: Math.ceil(count / pageSize) };
-  }
+                const product = await this.productModel.create({
+                    ...createProductDto,
+                    image: imagePath,
+                }, {transaction});
+
+                if (createProductDto.categoryIds) {
+                    for (const categoryId of createProductDto.categoryIds) {
+                        await this.productCategoryService.create({
+                            productId: product.id,
+                            categoryId,
+                        }, transaction);
+                    }
+                }
+
+                if (createProductDto.characteristics) {
+                    for (const characteristic of createProductDto.characteristics) {
+                        await this.productCharacteristicService.create({
+                            productId: product.id,
+                            characteristic,
+                        }, transaction);
+                    }
+                }
+
+                return product;
+            });
+
+            return result;
+        } catch (error) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

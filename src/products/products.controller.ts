@@ -1,21 +1,42 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { PaginatedProductsDto, PaginationQueryDto } from './dto';
-import { ApiTags } from '@nestjs/swagger';
-import { ProductsMockService } from './lib';
+import {Body, Controller, Post, UploadedFile, UseInterceptors,} from '@nestjs/common';
+import {ProductsService} from './products.service';
+import {CreateProductDto, ProductDto} from './dto';
+import {ApiTags} from '@nestjs/swagger';
+import {FileInterceptor} from '@nestjs/platform-express';
+import {diskStorage} from 'multer';
+import {extname} from 'path';
 
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
-  constructor(
-    private readonly productsService: ProductsService,
-    private readonly productsMockService: ProductsMockService,
-  ) {}
+    constructor(
+        private readonly productsService: ProductsService,
+    ) {
+    }
 
-  @Get('paginated')
-  findAndPaginateAll(
-    @Query() paginationQuery: PaginationQueryDto,
-  ): Promise<PaginatedProductsDto> {
-    return this.productsMockService.findAndPaginateAll(paginationQuery);
-  }
+    @Post()
+    @UseInterceptors(
+        FileInterceptor('image', {
+            storage: diskStorage({
+                destination: './uploads',
+                filename: (req, file, callback) => {
+                    try {
+                        const uniqueSuffix =
+                            Date.now() + '-' + Math.round(Math.random() * 1e9);
+                        const ext = extname(file.originalname);
+                        const filename = `${file.fieldname}-${uniqueSuffix}${ext}`;
+                        callback(null, filename);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                },
+            }),
+        }),
+    )
+    async addProduct(
+        @UploadedFile() image: Express.Multer.File,
+        @Body() body: CreateProductDto,
+    ): Promise<ProductDto> {
+        return await this.productsService.create(body, image);
+    }
 }
