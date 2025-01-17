@@ -1,6 +1,6 @@
-import {Body, Controller, Post, UploadedFile, UseInterceptors,} from '@nestjs/common';
+import {Body, Controller, Get, Post, Query, UploadedFile, UseInterceptors,} from '@nestjs/common';
 import {ProductsService} from './products.service';
-import {CreateProductDto, ProductDto} from './dto';
+import {CreateProductDto, PaginatedProductsDto, PaginationQueryDto, ProductDto} from './dto';
 import {ApiTags} from '@nestjs/swagger';
 import {FileInterceptor} from '@nestjs/platform-express';
 import {diskStorage} from 'multer';
@@ -38,5 +38,12 @@ export class ProductsController {
         @Body() body: CreateProductDto,
     ): Promise<ProductDto> {
         return await this.productsService.create(body, image);
+    }
+
+    @Get('paginated')
+    findAndPaginateAll(
+        @Query() paginationQuery: PaginationQueryDto,
+    ): Promise<PaginatedProductsDto> {
+        return this.productsService.findAndPaginateAll(paginationQuery);
     }
 }
