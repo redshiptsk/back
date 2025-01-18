@@ -9,6 +9,8 @@ import {
 import { Server, Socket } from 'socket.io';
 import { InjectModel } from '@nestjs/sequelize';
 import { Message } from './entities/message.model';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -44,5 +46,26 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         }));
         console.log('Sending messages:', formattedMessages);
         client.emit('messages', formattedMessages);
+    }
+
+    @SubscribeMessage('sendImage')
+    async handleImage(@MessageBody() message: { sender: string; image: string }, client: Socket) {
+        const imageBuffer = Buffer.from(message.image, 'base64');
+        const filename = `${Date.now()}.png`;
+        const filePath = path.join(__dirname, '..', 'uploads', filename);
+
+        fs.writeFileSync(filePath, imageBuffer);
+
+        const newMessage = await this.messageModel.create({
+            sender: message.sender,
+            text: 'Image sent',
+            imageUrl: `/uploads/${filename}`,
+        });
+
+        client.broadcast.emit('message', {
+            sender: message.sender,
+            text: 'Image sent',
+            imageUrl: `/uploads/${filename}`,
+        });
     }
 }

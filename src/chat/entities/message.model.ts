@@ -14,4 +14,10 @@ export class Message extends Model<Message>{
         allowNull: false,
     })
     text: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
+    imageUrl: string | null;
 }
