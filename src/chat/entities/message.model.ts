@@ -1,8 +1,7 @@
-import {Column, DataType, Model, Table} from "sequelize-typescript";
-
+import {Column, DataType, Model, Table} from 'sequelize-typescript';
 
 @Table
-export class Message extends Model<Message>{
+export class Message extends Model<Message> {
     @Column({
         type: DataType.STRING,
         allowNull: false,
