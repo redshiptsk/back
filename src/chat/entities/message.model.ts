@@ -1,8 +1,7 @@
-import {Column, DataType, Model, Table} from "sequelize-typescript";
-
+import {Column, DataType, Model, Table} from 'sequelize-typescript';
 
 @Table
-export class Message extends Model<Message>{
+export class Message extends Model<Message> {
     @Column({
         type: DataType.STRING,
         allowNull: false,
@@ -14,4 +13,10 @@ export class Message extends Model<Message>{
         allowNull: false,
     })
     text: string;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: true,
+    })
+    imageUrl: string | null;
 }
