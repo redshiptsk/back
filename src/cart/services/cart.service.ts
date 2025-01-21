@@ -15,33 +15,33 @@ export class CartService {
         private cartItemModel: typeof CartItem,
     ) {}
 
-    async addToCart(cartItemDto: CartItemDto) {
+    async addToCart(userId: number, cartItemDto: CartItemDto) {
         const { productId, quantity } = cartItemDto;
-        this.logger.log(`Adding product with ID ${productId} to cart`);
         const product = await this.productModel.findByPk(productId);
 
         if (!product) {
-            this.logger.error(`Product with ID ${productId} not found`);
             throw new NotFoundException(`Product with ID ${productId} not found`);
         }
 
-        let cartItem = await this.cartItemModel.findOne({ where: { productId } });
+        let cartItem = await this.cartItemModel.findOne({ where: { productId, userId } });
         if (cartItem) {
             cartItem.quantity += quantity;
             await cartItem.save();
         } else {
-            cartItem = await this.cartItemModel.create({ productId, quantity });
+            cartItem = await this.cartItemModel.create({ productId, quantity, userId });
         }
-        this.logger.log(`Product with ID ${productId} added to cart`);
     }
 
-    async getCart() {
-        this.logger.log('Getting cart');
-        return this.cartItemModel.findAll({ include: [Product] });
+    async getCart(userId: number) {
+        return this.cartItemModel.findAll({
+            where: { userId },
+            include: [Product]
+        });
     }
 
-    async clearCart() {
-        this.logger.log('Clearing cart');
-        await this.cartItemModel.destroy({ where: {} });
+    async clearCart(userId: number) {
+        await this.cartItemModel.destroy({
+            where: { userId }
+        });
     }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Delete } from '@nestjs/common';
+import {Controller, Post, Body, Get, Delete, Query} from '@nestjs/common';
 import {CartService} from "../services/cart.service";
 import {CartItemDto} from "../dto/cart-item.dto";
 import {ApiTags} from "@nestjs/swagger";
@@ -6,22 +6,23 @@ import {ApiTags} from "@nestjs/swagger";
 @ApiTags('cart')
 @Controller('cart')
 export class CartController {
-    constructor(private readonly cartService: CartService) {}
+    constructor(private readonly cartService: CartService) {
+    }
 
     @Post('add')
-    async addToCart(@Body() cartItemDto: CartItemDto) {
-        await this.cartService.addToCart(cartItemDto);
-        return { message: 'Item added to cart' };
+    async addToCart(@Query('userId') userId: number, @Body() cartItemDto: CartItemDto) {
+        await this.cartService.addToCart(userId, cartItemDto);
+        return {message: 'Item added to cart'};
     }
 
     @Get()
-    getCart() {
-        return this.cartService.getCart();
+    async getCart(@Query('userId') userId: number) {
+        return this.cartService.getCart(userId);
     }
 
     @Delete('clear')
-    clearCart() {
-        this.cartService.clearCart();
-        return { message: 'Cart cleared' };
+    async clearCart(@Query('userId') userId: number) {
+        await this.cartService.clearCart(userId);
+        return {message: 'Cart cleared'};
     }
 }

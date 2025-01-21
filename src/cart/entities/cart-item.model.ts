@@ -12,4 +12,7 @@ export class CartItem extends Model<CartItem>{
 
     @Column
     quantity: number;
+
+    @Column
+    userId: number;
 }
