@@ -13,15 +13,14 @@ import {Category} from './categories/categories.model';
 import {CategoriesModule} from './categories/categories.module';
 import {CharacteristicsModule} from './characteristics/characteristics.module';
 import {ProductCategory} from './product-category/product-category.model';
-import {
-    Characteristic,
-    CharacteristicValue,
-} from './characteristics/entities';
+import {Characteristic, CharacteristicValue,} from './characteristics/entities';
 import {ProductCategoryModule} from './product-category/products-category.module';
 import {ProductCharacteristicValue} from "./product-characteristic/product-characteristic-value.model";
 import {ProductCharacteristicModule} from "./product-characteristic/product-characteristic.module";
 import {ChatModule} from './chat/chat.module';
 import {FavoriteModule} from "./favorite/entities/favorite.module";
+import {OrderModule} from './order/order.module';
+import {Order, OrderItem, Payment} from "./order/entities";
 
 
 @Module({
@@ -42,7 +41,9 @@ import {FavoriteModule} from "./favorite/entities/favorite.module";
                 Characteristic,
                 CharacteristicValue,
                 ProductCharacteristicValue,
-
+                OrderItem,
+                Order,
+                Payment,
             ],
             autoLoadModels: true,
             synchronize: true,
@@ -56,12 +57,12 @@ import {FavoriteModule} from "./favorite/entities/favorite.module";
         ProductCategoryModule,
         ProductCharacteristicModule,
         FavoriteModule,
-
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'uploads'),
             serveRoot: '/uploads',
         }),
         ChatModule,
+        OrderModule,
     ],
 })
 export class AppModule {

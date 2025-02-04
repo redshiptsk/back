@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CartItemDto } from '../dto/cart-item.dto';
 import { Product } from '../../products/products.model';
 import {CartItem} from "../entities/cart-item.model";
+import {Transaction} from "sequelize";
 
 @Injectable()
 export class CartService {
@@ -39,9 +40,10 @@ export class CartService {
         });
     }
 
-    async clearCart(userId: number) {
+    async clearCart(userId: number, transaction?: Transaction) {
         await this.cartItemModel.destroy({
-            where: { userId }
+            where: { userId },
+            transaction,
         });
     }
 }
