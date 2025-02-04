@@ -47,6 +47,6 @@ export class UsersService {
     }
 
     async findOne(id: number): Promise<User> {
-        return this.userModel.findOne({ where: { id } });
+        return this.userModel.findByPk(id);
     }
 }

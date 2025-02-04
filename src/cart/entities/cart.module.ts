@@ -9,5 +9,6 @@ import {CartItem} from "./cart-item.model";
     imports: [SequelizeModule.forFeature([Product, CartItem])],
     providers: [CartService],
     controllers: [CartController],
+    exports: [CartService],
 })
 export class CartModule {}
