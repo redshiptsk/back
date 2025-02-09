@@ -1,4 +1,4 @@
-import {Column, DataType, Model, Table} from 'sequelize-typescript';
+import { Column, DataType, Model, Table } from "sequelize-typescript";
 
 @Table
 export class Message extends Model<Message> {
@@ -19,4 +19,10 @@ export class Message extends Model<Message> {
         allowNull: true,
     })
     imageUrl: string | null;
+
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
+    roomId: string;
 }

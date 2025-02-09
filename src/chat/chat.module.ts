@@ -12,4 +12,3 @@ import {ChatService} from "./services/chat.service";
     exports: [ChatGateway, ChatService],
 })
 export class ChatModule {}
-

@@ -6,6 +6,7 @@ import {
     Logger,
     BadRequestException,
     Res,
+    Body,
 } from '@nestjs/common';
 import {FileInterceptor} from '@nestjs/platform-express';
 import {diskStorage} from 'multer';
@@ -47,13 +48,15 @@ export class ChatController {
                     type: 'string',
                     format: 'binary',
                 },
+                sender: {type: "string"},
+                roomId: {type: "string"},
             },
         },
     })
-
     async sendImage(
         @UploadedFile() file: Express.Multer.File,
-        @Res() res: Response,
+        @Body() body: { sender: string; roomId: string },
+        @Res() res: Response
     ): Promise<void> {
         try {
             if (!file) {
@@ -69,9 +72,10 @@ export class ChatController {
             const imageUrl = `/uploads/chat-images/${file.filename}`;
 
             await this.chatService.saveMessage({
-                sender: 'system',
-                text: 'Image sent',
+                sender: body.sender,
+                text: "Image sent",
                 imageUrl,
+                roomId: body.roomId,
             });
 
             res.status(200).json({imageUrl});

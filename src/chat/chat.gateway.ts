@@ -24,18 +24,24 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         console.log(`Client disconnected: ${client.id}`);
     }
 
+    @SubscribeMessage("joinRoom")
+    handleJoinRoom(client: Socket, roomId: string) {
+        client.join(roomId);
+        console.log(`Client ${client.id} joined room ${roomId}`);
+    }
+
     @SubscribeMessage('message')
     async handleMessage(
-        @MessageBody() message: { sender: string; text: string },
+        @MessageBody() message: { sender: string; text: string; roomId: string; imageUrl?: string },
         client: Socket,
     ) {
         const savedMessage = await this.chatService.saveMessage(message);
-        this.server.emit('message', savedMessage);
+        this.server.to(message.roomId).emit("message", savedMessage);
     }
 
-    @SubscribeMessage('getMessages')
-    async handleGetMessages(client: Socket) {
-        const messages = await this.chatService.getAllMessages();
-        client.emit('messages', messages);
+    @SubscribeMessage("getMessages")
+    async handleGetMessages(client: Socket, roomId: string) {
+        const messages = await this.chatService.getMessages(roomId);
+        client.emit("messages", messages);
     }
 }
