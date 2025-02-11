@@ -8,4 +8,5 @@ export class ProductDto {
   readonly count: number;
   readonly rating: number;
   readonly reviews: number;
+  readonly sellerId: number;
 }
