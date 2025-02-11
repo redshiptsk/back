@@ -42,5 +42,6 @@ export class CreateProductDto {
 
   @ApiProperty({ example: 1 })
   @IsNumber()
+  @IsOptional()
   sellerId: number;
 }
