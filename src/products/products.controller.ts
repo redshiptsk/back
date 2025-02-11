@@ -1,7 +1,7 @@
-import {Body, Controller, Get, Param, Post, Query, UploadedFile, UseInterceptors,} from '@nestjs/common';
+import {Body, Controller, Get, Post, Query, UploadedFile, UseInterceptors,} from '@nestjs/common';
 import {ProductsService} from './products.service';
 import {CreateProductDto, PaginatedProductsDto, PaginationQueryDto, ProductDto} from './dto';
-import {ApiResponse, ApiTags} from '@nestjs/swagger';
+import {ApiTags} from '@nestjs/swagger';
 import {FileInterceptor} from '@nestjs/platform-express';
 import {diskStorage} from 'multer';
 import {extname} from 'path';
@@ -46,9 +46,4 @@ export class ProductsController {
     ): Promise<PaginatedProductsDto> {
         return this.productsService.findAndPaginateAll(paginationQuery);
     }
-    
-    @Get('seller/:sellerId')        
-        async findSellerProducts(@Param('sellerId') sellerId: number) {
-            return this.productsService.findSellerProducts(sellerId);
-        }
 }

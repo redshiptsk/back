@@ -22,10 +22,6 @@ export class Product extends Model {
     @Column
     id: number;
 
-    @ApiProperty({example: 1})
-    @Column
-    sellerId: number;
-
     @ApiProperty({example: 'Havic HV G-92 Gamepad'})
     @AllowNull(false)
     @Column

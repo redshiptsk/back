@@ -39,8 +39,4 @@ export class CreateProductDto {
   @ValidateNested({ each: true })
   @Type(() => CreateCharacteristicDto)
   characteristics: CreateCharacteristicDto[];
-
-  @ApiProperty({ example: 1 })
-  @IsNumber()
-  sellerId: number;
 }
