@@ -51,9 +51,14 @@ export class OrderService {
                     }, {transaction})
 
                     await this.chatService.saveMessage({
-                        text: `Order ${order.id} created`,
+                        text: `Order ${order.id} created with product ${cartItem.product.name}`,
                         roomId: `${user.id}_${sellerId}`,
                         senderId: user.id,    
+                    });
+                    await this.chatService.saveMessage({
+                        text: `Order ${order.id} affirmed with product ${cartItem.product.name}`,
+                        roomId: `${user.id}_${sellerId}`,
+                        senderId: sellerId,    
                     });
                 }
 
