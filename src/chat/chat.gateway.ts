@@ -32,7 +32,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @SubscribeMessage('message')
     async handleMessage(
-        @MessageBody() message: { sender: string; text: string; roomId: string; imageUrl?: string },
+        @MessageBody() message: { senderId: number; text: string; roomId: string; imageUrl?: string },
         client: Socket,
     ) {
         const savedMessage = await this.chatService.saveMessage(message);
@@ -44,4 +44,11 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
         const messages = await this.chatService.getMessages(roomId);
         client.emit("messages", messages);
     }
+
+    @SubscribeMessage("getRooms")
+    async handleGetRooms(client: Socket, userId: number) {
+        const rooms = await this.chatService.getRooms(userId);
+        this.server.emit("rooms", rooms);
+    }
+
 }

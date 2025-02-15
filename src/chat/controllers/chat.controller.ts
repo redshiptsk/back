@@ -48,14 +48,14 @@ export class ChatController {
                     type: 'string',
                     format: 'binary',
                 },
-                sender: {type: "string"},
+                senderId: {type: "number"},
                 roomId: {type: "string"},
             },
         },
     })
     async sendImage(
         @UploadedFile() file: Express.Multer.File,
-        @Body() body: { sender: string; roomId: string },
+        @Body() body: { senderId: number; roomId: string },
         @Res() res: Response
     ): Promise<void> {
         try {
@@ -70,13 +70,6 @@ export class ChatController {
             }
 
             const imageUrl = `/uploads/chat-images/${file.filename}`;
-
-            await this.chatService.saveMessage({
-                sender: body.sender,
-                text: "Image sent",
-                imageUrl,
-                roomId: body.roomId,
-            });
 
             res.status(200).json({imageUrl});
         } catch (error) {

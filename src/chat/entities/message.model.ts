@@ -3,10 +3,10 @@ import { Column, DataType, Model, Table } from "sequelize-typescript";
 @Table
 export class Message extends Model<Message> {
     @Column({
-        type: DataType.STRING,
+        type: DataType.NUMBER,
         allowNull: false,
     })
-    sender: string;
+    senderId: number;
 
     @Column({
         type: DataType.TEXT,

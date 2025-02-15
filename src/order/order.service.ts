@@ -7,6 +7,7 @@ import {UsersService} from "../users/services/users.service";
 import {MakePaymentQueryDto} from "./dto";
 import {DeliveryInfoDto} from "./dto/delivery-info";
 import {v4 as uuid} from 'uuid';
+import { ChatService } from '../chat/services/chat.service';
 
 @Injectable()
 export class OrderService {
@@ -15,11 +16,13 @@ export class OrderService {
         private orderModel: typeof Order,
         @InjectModel(OrderItem)
         private orderItemModel: typeof OrderItem,
+        private readonly chatService: ChatService,
         @InjectModel(Payment)
         private paymentModel: typeof Payment,
         private readonly cartService: CartService,
         private readonly usersService: UsersService,
         private readonly sequelize: Sequelize,
+        
     ) {
     }
 
@@ -37,6 +40,7 @@ export class OrderService {
 
                 let totalAmount = 0;
                 for (const cartItem of cart) {
+                    const sellerId = cartItem.product.sellerId;
                     totalAmount += cartItem.product.price * cartItem.quantity;
 
                     await this.orderItemModel.create({
@@ -45,6 +49,12 @@ export class OrderService {
                         quantity: cartItem.quantity,
                         price: cartItem.product.price,
                     }, {transaction})
+
+                    await this.chatService.saveMessage({
+                        text: `Order ${order.id} created`,
+                        roomId: `${user.id}_${sellerId}`,
+                        senderId: user.id,    
+                    });
                 }
 
                 await order.update({
