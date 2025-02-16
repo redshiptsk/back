@@ -114,6 +114,12 @@ export class ProductsService {
     return { data, totalPages: Math.ceil(count / pageSize) };
   }
 
+  async findOne(id: number) {
+    return this.productModel.findByPk(id, {
+      include: [Category, CharacteristicValue],
+    });
+  }
+
   async findSellerProducts(sellerId: number) {
     const data = await this.productModel.findAll({
       where: { sellerId },

@@ -51,4 +51,10 @@ export class ProductsController {
         async findSellerProducts(@Param('sellerId') sellerId: number) {
             return this.productsService.findSellerProducts(sellerId);
         }
+
+    @Get(':id')
+    @ApiResponse({status: 200, type: ProductDto})
+    async findOne(@Param('id') id: number): Promise<ProductDto> {
+        return this.productsService.findOne(id);
+    }    
 }
